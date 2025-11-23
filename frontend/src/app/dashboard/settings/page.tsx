@@ -22,12 +22,24 @@ import { integrationApi } from "@/lib/api-client";
 import { useToast } from "@/hooks/use-toast";
 
 const apiKeysSchema = z.object({
-  openaiApiKey: z.string().optional(),
-  deepgramApiKey: z.string().optional(),
-  elevenLabsApiKey: z.string().optional(),
-  telnyxApiKey: z.string().optional(),
-  twilioAccountSid: z.string().optional(),
-  twilioAuthToken: z.string().optional(),
+  openaiApiKey: z
+    .string()
+    .regex(/^sk-/, "OpenAI API key should start with 'sk-'")
+    .optional()
+    .or(z.literal("")),
+  deepgramApiKey: z.string().optional().or(z.literal("")),
+  elevenLabsApiKey: z.string().optional().or(z.literal("")),
+  telnyxApiKey: z
+    .string()
+    .regex(/^KEY/, "Telnyx API key should start with 'KEY'")
+    .optional()
+    .or(z.literal("")),
+  twilioAccountSid: z
+    .string()
+    .regex(/^AC/, "Twilio Account SID should start with 'AC'")
+    .optional()
+    .or(z.literal("")),
+  twilioAuthToken: z.string().optional().or(z.literal("")),
 });
 
 type ApiKeysFormValues = z.infer<typeof apiKeysSchema>;

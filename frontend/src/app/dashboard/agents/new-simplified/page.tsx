@@ -37,10 +37,23 @@ import { useToast } from "@/hooks/use-toast";
 const agentFormSchema = z.object({
   // Step 1: Pricing & Basic
   pricingTier: z.enum(["budget", "balanced", "premium"]).default("balanced"),
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  description: z.string().optional(),
+  name: z
+    .string()
+    .min(2, "Agent name must be at least 2 characters")
+    .max(100, "Agent name must be less than 100 characters")
+    .regex(
+      /^[a-zA-Z0-9\s\-_]+$/,
+      "Agent name can only contain letters, numbers, spaces, hyphens, and underscores"
+    ),
+  description: z
+    .string()
+    .max(500, "Description must be less than 500 characters")
+    .optional(),
   language: z.string().default("en-US"),
-  systemPrompt: z.string().min(10, "System prompt is required"),
+  systemPrompt: z
+    .string()
+    .min(10, "System prompt must be at least 10 characters to be effective")
+    .max(2000, "System prompt must be less than 2000 characters"),
 
   // Step 2: Tools
   enabledTools: z.array(z.string()).default([]),
